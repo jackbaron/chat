@@ -1,19 +1,40 @@
 import React from 'react';
 
-const Chats = ({activeMsg}) => {
-    const Chat = ({message}) => {
+class Chats extends React.Component {
+    constructor(props) {
+        super(props);
+        this.chatsRef = React.createRef();
+    }
+
+    componentDidMount() {
+        this.scrollToBottom();
+    }
+    componentDidUpdate() {
+        this.scrollToBottom();
+    }
+
+    scrollToBottom = () => {
+        console.log(this.chatsRef);
+        this.chatsRef.current.scrollTop = this.chatsRef.current.scrollHeight;
+    };
+    
+    Chat(message, index) {
         const {text, is_user_msg} = message;
         return (
-            <span className={`Chat ${is_user_msg ? "is-user-msg" : ""}`}>{text}</span>
+            <span key={index} className={`Chat ${is_user_msg ? "is-user-msg" : ""}`}>{text}</span>
         )
     };
-    return (
-        <div className="Chats">
-            {activeMsg.map((message, index) => (
-                <Chat message={message} key={index} />
-            ))}
-        </div>
-    )
+    
+    render() {
+        const {activeMsg} = this.props;
+        return (
+            <div className="Chats" ref={this.chatsRef}>
+                {activeMsg.map((message, index) => (
+                    this.Chat(message, index)
+                ))}
+            </div>
+        )
+    }
 }
 
 export default Chats;
